@@ -58,3 +58,15 @@ class RBACTests(TestCase):
         self.client.login(username='admin_user', password='password')
         response = self.client.get(reverse('member_view'))
         self.assertNotEqual(response.status_code, 200)
+
+    def test_add_book_permission(self):
+        from django.contrib.auth.models import Permission
+        permission = Permission.objects.get(codename='can_add_book')
+        self.admin_user.user_permissions.add(permission)
+        self.client.login(username='admin_user', password='password')
+        response = self.client.get(reverse('add_book'))
+        self.assertEqual(response.status_code, 200)
+
+        self.client.login(username='member_user', password='password')
+        response = self.client.get(reverse('add_book'))
+        self.assertNotEqual(response.status_code, 200)
