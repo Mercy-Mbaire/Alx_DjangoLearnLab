@@ -122,17 +122,47 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 # Security Settings
-SECURE_BROWSER_XSS_FILTER = True
-X_FRAME_OPTIONS = 'DENY'
-SECURE_CONTENT_TYPE_NOSNIFF = True
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+
+# SECURE_SSL_REDIRECT: Redirects all HTTP requests to HTTPS. 
+# This is crucial for protecting data in transit.
 SECURE_SSL_REDIRECT = True
+
+# SECURE_HSTS_SECONDS: The duration (in seconds) that the browser should 
+# remember to only access the site via HTTPS. 31536000 seconds is 1 year.
 SECURE_HSTS_SECONDS = 31536000
+
+# SECURE_HSTS_INCLUDE_SUBDOMAINS: Ensures that the HSTS policy applies to 
+# all subdomains of the current domain.
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+# SECURE_HSTS_PRELOAD: Allows the site to be submitted to the HSTS preload list 
+# maintained by browser vendors.
 SECURE_HSTS_PRELOAD = True
 
+# SESSION_COOKIE_SECURE: Ensures that session cookies are only sent over 
+# secure (HTTPS) connections.
+SESSION_COOKIE_SECURE = True
+
+# CSRF_COOKIE_SECURE: Ensures that CSRF cookies are only sent over 
+# secure (HTTPS) connections, protecting against cross-site request forgery.
+CSRF_COOKIE_SECURE = True
+
+# X_FRAME_OPTIONS: Prevents the site from being rendered inside a <frame>, 
+# <iframe>, or <object> to protect against clickjacking attacks.
+X_FRAME_OPTIONS = 'DENY'
+
+# SECURE_CONTENT_TYPE_NOSNIFF: Prevents the browser from MIME-sniffing the response 
+# away from the declared content-type, reducing exposure to drive-by downloads.
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# SECURE_BROWSER_XSS_FILTER: Enables the browser's XSS filter to help 
+# prevent cross-site scripting attacks.
+SECURE_BROWSER_XSS_FILTER = True
+
 # Content Security Policy
+# CSP_DEFAULT_SRC: Defines the default policy for fetching resources.
 CSP_DEFAULT_SRC = ("'self'",)
+# CSP_STYLE_SRC: Restricts the sources of Stylesheets.
 CSP_STYLE_SRC = ("'self'",)
+# CSP_SCRIPT_SRC: Restricts the sources of JavaScript.
 CSP_SCRIPT_SRC = ("'self'",)
