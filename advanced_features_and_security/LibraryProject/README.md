@@ -23,6 +23,12 @@ This project demonstrates advanced Django features, including a custom user mode
    python manage.py setup_groups
    ```
 
+## Security Best Practices (Task 3)
+- **CSRF Protection**: All forms in templates use `{% csrf_token %}`.
+- **Safe Input Handling**: `BookForm` and `ExampleForm` in `forms.py` sanitize and validate inputs.
+- **Safe Searching**: The `book_search` view uses Django's ORM filtering to parameterized queries and prevent SQL Injection.
+- **Content Security Policy**: CSRF and CSP headers are enforced via middleware.
+
 ## Key Features
 
 ### 1. Custom User Model
@@ -44,3 +50,11 @@ Located in `bookshelf/models.py` and `bookshelf/views.py`.
 ## Verification
 - **Automated Tests**: Run tests with `python manage.py test`.
 - **Manual Verification**: Create test users, assign them to groups, and verify access to protected views in the `bookshelf` app.
+
+## Task 3: Security Best Practices
+- **Secure Settings**: `DEBUG` is set to `False`, and CSRF/Session cookies are secured.
+- **Security Headers**: XSS filter, No-Sniff, and X-Frame-Options are configured.
+- **SSL/HTTPS**: `SECURE_SSL_REDIRECT` and HSTS settings are enabled for production safety.
+- **CSP**: Content Security Policy is implemented using `django-csp`.
+- **Form Safety**: All user inputs are validated via Django forms in `bookshelf/forms.py`.
+- **Safe Queries**: All database access uses Django's ORM to prevent SQL injection.
