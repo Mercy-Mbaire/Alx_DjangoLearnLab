@@ -123,6 +123,10 @@ STATIC_URL = 'static/'
 
 # Security Settings
 
+# SECURE_PROXY_SSL_HEADER: Tells Django to trust the X-Forwarded-Proto header 
+# from a proxy and consider the request secure (HTTPS).
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 # SECURE_SSL_REDIRECT: Redirects all HTTP requests to HTTPS. 
 # This is crucial for protecting data in transit.
 SECURE_SSL_REDIRECT = True
