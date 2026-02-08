@@ -1,5 +1,6 @@
-from rest_framework import generics
+from rest_framework import generics, filters
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from django_filters.rest_framework import DjangoFilterBackend
 from .models import Book
 from .serializers import BookSerializer
 
@@ -10,10 +11,12 @@ class BookListView(generics.ListAPIView):
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly] # Or AllowAny if completely public, but prompt asked for IsAuthenticatedOrReadOnly logic implicitly for list/detail vs others? 
-    # Prompt says: "restrict CreateView, UpdateView, and DeleteView to authenticated users only, while allowing read-only access to unauthenticated users for ListView and DetailView."
-    # IsAuthenticatedOrReadOnly does exactly that for standard method based differentiation, but if we split views, we can use specific permissions.
-    # For ListView (GET only usually), AllowAny or IsAuthenticatedOrReadOnly works. Let's use IsAuthenticatedOrReadOnly to be safe/consistent.
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['title', 'author', 'publication_year']
+    search_fields = ['title', 'author__name']
+    ordering_fields = ['title', 'publication_year']
+    ordering = ['title']
 
 class BookDetailView(generics.RetrieveAPIView):
     """

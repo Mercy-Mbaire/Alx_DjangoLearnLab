@@ -28,6 +28,24 @@ The following endpoints are available under the `/api/` prefix:
     - `IsAuthenticatedOrReadOnly`: Used for List and Detail views to allow public read access.
     - `IsAuthenticated`: Used for Create, Update, and Delete views to ensure only logged-in users can modify data.
 
+## Advanced Query Features
+The `BookListView` endpoint (`/api/books/`) supports the following query parameters:
+
+### Filtering
+Filter books by exact matches:
+- `?title=...`
+- `?author=...`
+- `?publication_year=...`
+
+### Searching
+Search `title` and `author` (by name) using the `search` parameter:
+- `?search=Harry` (Matches "Harry Potter")
+
+### Ordering
+Order results using the `ordering` parameter:
+- `?ordering=title` (Ascending by title)
+- `?ordering=-publication_year` (Descending by year)
+
 ## Testing
 To run the view verification script:
 ```bash

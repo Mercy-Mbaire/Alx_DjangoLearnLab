@@ -1,0 +1,17 @@
+Creating test database for alias 'default'...
+.F......
+======================================================================
+FAIL: test_create_book_unauthenticated (api.test_views.BookTests.test_create_book_unauthenticated)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/mercy/Alx_DjangoLearnLab/advanced-api-project/api/test_views.py", line 41, in test_create_book_unauthenticated
+    self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+AssertionError: 403 != 401
+
+----------------------------------------------------------------------
+Ran 8 tests in 9.413s
+
+FAILED (failures=1)
+Destroying test database for alias 'default'...
+Found 8 test(s).
+System check identified no issues (0 silenced).
