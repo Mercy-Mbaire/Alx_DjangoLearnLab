@@ -1,0 +1,18 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Edit Comment - Django Blog{% endblock %}
+
+{% block content %}
+<div class="post-form-container">
+    <h2>Edit Comment</h2>
+
+    <form method="post" class="post-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Update Comment</button>
+            <a href="{% url 'post-detail' object.post.pk %}" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -49,3 +49,21 @@ class PostForm(forms.ModelForm):
             'content': 'Post Content',
         }
 
+
+class CommentForm(forms.ModelForm):
+    """Form for adding and editing comments"""
+    class Meta:
+        model = Comment
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Leave a comment...',
+                'rows': 3
+            }),
+        }
+        labels = {
+            'content': '',
+        }
+
+

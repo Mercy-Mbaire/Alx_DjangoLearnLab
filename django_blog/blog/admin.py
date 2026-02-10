@@ -8,3 +8,11 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ('published_date', 'author')
     search_fields = ('title', 'content')
     date_hierarchy = 'published_date'
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('author', 'post', 'created_at', 'updated_at')
+    list_filter = ('created_at', 'updated_at', 'author')
+    search_fields = ('content', 'author__username', 'post__title')
+
