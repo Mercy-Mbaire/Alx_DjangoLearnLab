@@ -38,11 +38,11 @@ class BlogSearchTagsTests(TestCase):
         self.assertNotContains(response, 'Django Guide')
 
     def test_tag_filtered_view(self):
-        response = self.client.get(reverse('post-by-tag', kwargs={'tag_name': 'python'}))
+        response = self.client.get(reverse('post-by-tag', kwargs={'tag_slug': 'python'}))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Django Guide')
         self.assertContains(response, 'Flask vs FastAPI')
 
-        response = self.client.get(reverse('post-by-tag', kwargs={'tag_name': 'django'}))
+        response = self.client.get(reverse('post-by-tag', kwargs={'tag_slug': 'django'}))
         self.assertContains(response, 'Django Guide')
         self.assertNotContains(response, 'Flask vs FastAPI')
