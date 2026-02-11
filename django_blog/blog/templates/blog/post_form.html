@@ -39,6 +39,14 @@
             {% endif %}
         </div>
 
+        <div class="form-group">
+            <label for="{{ form.tags.id_for_label }}">Tags (comma-separated)</label>
+            {{ form.tags }}
+            {% if form.tags.errors %}
+            <span class="error">{{ form.tags.errors }}</span>
+            {% endif %}
+        </div>
+
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">
                 {% if form.instance.pk %}Update Post{% else %}Create Post{% endif %}
