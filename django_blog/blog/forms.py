@@ -44,15 +44,20 @@ class PostForm(forms.ModelForm):
                 'placeholder': 'Write your post content here...',
                 'rows': 10
             }),
-            'tags': TagWidget(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter tags (comma-separated)'
-            }),
+            'tags': TagWidget(),
         }
         labels = {
             'title': 'Post Title',
             'content': 'Post Content',
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs.update({'class': 'form-control'})
+        self.fields['title'].widget.attrs.update({'placeholder': 'Enter post title'})
+        self.fields['content'].widget.attrs.update({'placeholder': 'Write your post content here...', 'rows': 10})
+        self.fields['tags'].widget.attrs.update({'placeholder': 'Enter tags (comma-separated)'})
 
 
 class CommentForm(forms.ModelForm):

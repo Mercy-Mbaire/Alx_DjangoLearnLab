@@ -21,18 +21,18 @@ class BlogSearchTagsTests(TestCase):
         self.post2.tags.add('fastapi', 'python')
 
     def test_search_by_title(self):
-        response = self.client.get(reverse('search-results') + '?q=Django')
+        response = self.client.get(reverse('search') + '?q=Django')
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Django Guide')
         self.assertNotContains(response, 'Flask vs FastAPI')
 
     def test_search_by_content(self):
-        response = self.client.get(reverse('search-results') + '?q=models')
+        response = self.client.get(reverse('search') + '?q=models')
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Django Guide')
 
     def test_search_by_tags(self):
-        response = self.client.get(reverse('search-results') + '?q=fastapi')
+        response = self.client.get(reverse('search') + '?q=fastapi')
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Flask vs FastAPI')
         self.assertNotContains(response, 'Django Guide')
