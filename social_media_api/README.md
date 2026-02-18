@@ -59,6 +59,13 @@ A Django-based social media API with user authentication.
     -   `POST`: Create a new comment.
     -   `PUT/DELETE`: Update/Delete comment (Author only).
 
+### Follows and Feed
+
+-   **Follow User:** `POST /api/accounts/follow/<user_id>/`
+-   **Unfollow User:** `POST /api/accounts/unfollow/<user_id>/`
+-   **Feed:** `GET /api/feed/`
+    -   Returns posts from users the current user follows, ordered by newest first.
+
 ## Models
 
 ### CustomUser
