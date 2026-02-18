@@ -47,6 +47,18 @@ A Django-based social media API with user authentication.
     -   Headers: `Authorization: Token <token>`
     -   Response: User details including bio and followers.
 
+### Posts and Comments
+
+-   **Posts:** `/api/posts/`
+    -   `GET`: List all posts (Pagination: ?page=1). Filter by title/content: `?search=keyword`.
+    -   `POST`: Create a new post.
+    -   `PUT/DELETE`: Update/Delete post (Author only).
+
+-   **Comments:** `/api/comments/`
+    -   `GET`: List all comments.
+    -   `POST`: Create a new comment.
+    -   `PUT/DELETE`: Update/Delete comment (Author only).
+
 ## Models
 
 ### CustomUser
@@ -55,3 +67,15 @@ Extends `AbstractUser` with:
 -   `bio`: TextField
 -   `profile_picture`: ImageField
 -   `followers`: ManyToManyField to self (symmetrical=False)
+
+### Post
+-   `author`: ForeignKey to CustomUser
+-   `title`: CharField
+-   `content`: TextField
+-   `created_at`, `updated_at`: DateTimeField
+
+### Comment
+-   `post`: ForeignKey to Post
+-   `author`: ForeignKey to CustomUser
+-   `content`: TextField
+-   `created_at`, `updated_at`: DateTimeField
