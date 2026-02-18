@@ -66,6 +66,34 @@ A Django-based social media API with user authentication.
 -   **Feed:** `GET /api/feed/`
     -   Returns posts from users the current user follows, ordered by newest first.
 
+## Deployment
+
+This project is configured for deployment on platforms like Heroku.
+
+### Prerequisites
+
+-   `gunicorn`
+-   `whitenoise`
+-   `dj-database-url`
+-   `psycopg2-binary`
+
+### Configuration
+
+The project uses environment variables for configuration. Ensure the following variables are set in your production environment:
+
+-   `DEBUG`: Set to `False`.
+-   `SECRET_KEY`: Your production secret key.
+-   `ALLOWED_HOSTS`: Comma-separated list of allowed hosts (e.g., `myapp.herokuapp.com`).
+-   `DATABASE_URL`: Connection string for your production database (e.g., PostgreSQL).
+
+### Run Command
+
+The `Procfile` is set up to run the application using Gunicorn:
+
+```
+web: gunicorn social_media_api.wsgi --log-file -
+```
+
 ## Models
 
 ### CustomUser
