@@ -1,4 +1,31 @@
-# Social Media API
+## Deployment
+
+This project is configured for deployment on **Render**.
+
+### Steps to Deploy
+
+1.  **Create a PostgreSQL Database** on Render.
+    - Copy the **Internal Database URL**.
+2.  **Create a Web Service** on Render.
+    - Connect your GitHub repository.
+    - Set **Runtime** to `Python 3`.
+    - Set **Build Command** to `./build.sh`.
+    - Set **Start Command** to `gunicorn social_media_api.wsgi`.
+3.  **Environment Variables**:
+    - Add the following environment variables in the Render Dashboard:
+      - `SECRET_KEY`: Your Django secret key.
+      - `DATABASE_URL`: The Internal Database URL from your Render PostgreSQL.
+      - `ALLOWED_HOSTS`: `your-app-name.onrender.com` (or `*`).
+      - `DEBUG`: `False`.
+      - `PYTHON_VERSION`: `3.14.0` (or as specified in `runtime.txt`).
+
+### Production Security
+
+The following security settings are enabled when `DEBUG=False`:
+- `SECURE_BROWSER_XSS_FILTER = True`
+- `X_FRAME_OPTIONS = 'DENY'`
+- `SECURE_CONTENT_TYPE_NOSNIFF = True`
+- `SECURE_SSL_REDIRECT = True`
 
 A Django-based social media API with user authentication.
 
