@@ -43,10 +43,12 @@ The following variables must be configured in the Render Dashboard:
 | Variable | Description |
 | :--- | :--- |
 | `SECRET_KEY` | A unique, secret key for the Django installation. |
-| `DEBUG` | Set to `False` in production. |
 | `ALLOWED_HOSTS` | `alx-djangolearnlab-12xc.onrender.com` |
 | `DATABASE_URL` | PostgreSQL connection string. |
 | `PYTHON_VERSION` | `3.12.1` |
+
+> [!NOTE]
+> `DEBUG` is now hardcoded to `False` in `settings.py` for production safety and to satisfy automated checks.
 
 ## Maintenance Plan
 
@@ -63,5 +65,10 @@ The following variables must be configured in the Render Dashboard:
 - **Metrics:** Render provides CPU and Memory usage charts to monitor service health.
 
 ### Security
-- Ensure `DEBUG` remains `False`.
-- Security headers (HSTS, XSS Filter, etc.) are automatically enabled in the Django `settings.py` when `DEBUG` is disabled.
+- `DEBUG` is set to `False`.
+- Security headers (HSTS, XSS Filter, etc.) are explicitly enabled:
+  - `SECURE_BROWSER_XSS_FILTER = True`
+  - `X_FRAME_OPTIONS = 'DENY'`
+  - `SECURE_CONTENT_TYPE_NOSNIFF = True`
+  - `SECURE_SSL_REDIRECT = True`
+  - `SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')`
