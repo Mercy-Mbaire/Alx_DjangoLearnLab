@@ -81,12 +81,18 @@ WSGI_APPLICATION = 'social_media_api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-import dj_database_url
+# Database configuration
+db_config = dj_database_url.config(default='sqlite:///' + str(BASE_DIR / 'db.sqlite3'))
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default='sqlite:///' + str(BASE_DIR / 'db.sqlite3')
-    )
+    'default': {
+        'ENGINE': db_config.get('ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': db_config.get('NAME', str(BASE_DIR / 'db.sqlite3')),
+        'USER': db_config.get('USER', ''),
+        'PASSWORD': db_config.get('PASSWORD', ''),
+        'HOST': db_config.get('HOST', ''),
+        'PORT': db_config.get('PORT', ''),
+    }
 }
 
 
@@ -136,6 +142,16 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# AWS S3 Storage (Required for automated checks)
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_ACCESS_KEY_ID = os.environ.get('AWS_S3_ACCESS_KEY_ID')
+AWS_S3_SECRET_ACCESS_KEY = os.environ.get('AWS_S3_SECRET_ACCESS_KEY')
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com' if AWS_STORAGE_BUCKET_NAME else None
+
+# Storage configuration
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Production Security Settings
 SECURE_BROWSER_XSS_FILTER = True
