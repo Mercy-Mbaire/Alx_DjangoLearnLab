@@ -2,7 +2,14 @@
 # exit on error
 set -o errexit
 
-pip install -r requirements.txt
+# install dependencies
+pip install -r social_media_api/requirements.txt
 
+# move into Django project folder
+cd social_media_api
+
+# collect static files
 python manage.py collectstatic --noinput
+
+# run migrations
 python manage.py migrate
