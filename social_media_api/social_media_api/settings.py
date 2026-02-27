@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 import os
 from pathlib import Path
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,10 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-default-key-for-dev')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'alx-djangolearnlab-12xc.onrender.com,localhost,127.0.0.1').split(',')
+# Minimal settings to satisfy Django --deploy check
+DEBUG = False if os.environ.get('DATABASE_URL') else True
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
 
 
 
@@ -78,22 +78,32 @@ TEMPLATES = [
 WSGI_APPLICATION = 'social_media_api.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-
-# Database configuration
-db_config = dj_database_url.config(default='sqlite:///' + str(BASE_DIR / 'db.sqlite3'))
-
-DATABASES = {
-    'default': {
-        'ENGINE': db_config.get('ENGINE', 'django.db.backends.sqlite3'),
-        'NAME': db_config.get('NAME', str(BASE_DIR / 'db.sqlite3')),
-        'USER': db_config.get('USER', ''),
-        'PASSWORD': db_config.get('PASSWORD', ''),
-        'HOST': db_config.get('HOST', ''),
-        'PORT': db_config.get('PORT', ''),
+# -------------------------
+# DATABASE CONFIGURATION
+# -------------------------
+if os.environ.get('DATABASE_URL'):
+    db_config = dj_database_url.config(
+        default=os.environ['DATABASE_URL'],
+        conn_max_age=600,
+        ssl_require=True
+    )
+    DATABASES = {
+        'default': {
+            'ENGINE': db_config.get('ENGINE', 'django.db.backends.postgresql'),
+            'NAME': db_config.get('NAME'),
+            'USER': db_config.get('USER'),
+            'PASSWORD': db_config.get('PASSWORD'),
+            'HOST': db_config.get('HOST'),
+            'PORT': db_config.get('PORT', '5432'),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': str(BASE_DIR / 'db.sqlite3'),
+        }
+    }
 
 
 # Password validation
@@ -136,28 +146,26 @@ REST_FRAMEWORK = {
     ],
 }
 
-# Static and Media files
-STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-# AWS S3 Storage (Required for automated checks)
-AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
-AWS_S3_ACCESS_KEY_ID = os.environ.get('AWS_S3_ACCESS_KEY_ID')
-AWS_S3_SECRET_ACCESS_KEY = os.environ.get('AWS_S3_SECRET_ACCESS_KEY')
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com' if AWS_STORAGE_BUCKET_NAME else None
-
-# Storage configuration
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# Production Security Settings
-SECURE_BROWSER_XSS_FILTER = True
-X_FRAME_OPTIONS = 'DENY'
-SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_SSL_REDIRECT = True
-
-# Proxy SSL Header for Render/Heroku
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# -------------------------
+# STATIC & MEDIA CONFIGURATION
+# -------------------------
+# Use local files for development
+if os.environ.get('USE_S3') == 'True':
+    # Production S3 setup
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    
+    # Static files
+    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    
+    # Media files
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+else:
+    # Local dev fallback
+    STATIC_URL = '/static/'
+    STATIC_ROOT = BASE_DIR / 'staticfiles'
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = BASE_DIR / 'media'
